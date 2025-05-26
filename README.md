@@ -55,7 +55,8 @@ This microservice aggregates stock price data from multiple sources and serves c
   - **Response:** JSON object containing aggregated stock prices and related metadata  
   - **Example Response:**  
     ```json
-![Stock Aggregation Architecture](./stock_service_architecture.png)
+![Stock Service Architecture](https://res.cloudinary.com/domfamgtf/image/upload/v1748241032/stock_service_architecture_ag84br.png)
+
 
 ## Technologies and Tools Used  
 - Node.js  
