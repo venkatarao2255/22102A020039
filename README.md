@@ -24,8 +24,13 @@ This microservice provides an HTTP API to calculate the average of a list of num
   - **Description:** Calculates the average of numbers sent in the request body  
   - **Request Body:** JSON array of numbers  
   - **Response:** JSON object with the average value  
-  - **Example:**  
+  - **Example:**
+  - 
   
+
+![Stock Service Architecture](https://asset.cloudinary.com/domfamgtf/3d42e5b15abc344ed14bee69c24b8b90
+)
+
 
 ### Technologies and Tools Used  
 - Node.js  
