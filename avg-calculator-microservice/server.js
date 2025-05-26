@@ -5,61 +5,65 @@ const app = express();
 const PORT = 3000;
 const WINDOW_SIZE = 10;
 const TIMEOUT_MS = 500;
-const storedNumbers = [];
+let storedNumbers = [];
 
-const NUMBER_API_URL = "https://test-server.com/numbers"; 
+const BASE_URL = "http://20.244.56.144/evaluation-service";
+const AUTH_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJNYXBDbGFpbXMiOnsiZXhwIjoxNzQ4MjM1ODIwLCJpYXQiOjE3NDgyMzU1MjAsImlzcyI6IkFmZm9yZG1lZCIsImp0aSI6IjBjMjhlZmExLTU5MTgtNGRkNC04ZDczLTVhODNmYjIwZDk5MyIsInN1YiI6ImR2ZW5rYXRhcmFvOTUyQGdtYWlsLmNvbSJ9LCJlbWFpbCI6ImR2ZW5rYXRhcmFvOTUyQGdtYWlsLmNvbSIsIm5hbWUiOiJkYXNhcmkgdmVua2F0YXJhbyIsInJvbGxObyI6IjIyMTAyYTAyMDAzOSIsImFjY2Vzc0NvZGUiOiJkSkZ1ZkUiLCJjbGllbnRJRCI6IjBjMjhlZmExLTU5MTgtNGRkNC04ZDczLTVhODNmYjIwZDk5MyIsImNsaWVudFNlY3JldCI6ImJjcUZCZmZ4WWJUSmdyVXcifQ.igksLdBssF0GbbIOySxR4JippTtIk8wkfLcQzBOSyhk";
 
-
-const fetchNumber = async (type) => {
+async function fetchNumbers(type) {
     try {
-        const source = axios.CancelToken.source();
-        const timeout = setTimeout(() => source.cancel("Timeout exceeded"), TIMEOUT_MS);
-
-        const response = await axios.get(`${NUMBER_API_URL}/${type}`, {
-            cancelToken: source.token,
+        const response = await axios.get(`${BASE_URL}/numbers/${type}`, {
+            timeout: TIMEOUT_MS,
+            headers: {
+                Authorization: AUTH_TOKEN
+            }
         });
 
-        clearTimeout(timeout); 
-
-        if (response.data && typeof response.data.number === "number") {
-            return response.data.number;
-        }
+        return response.data.numbers || [];
     } catch (error) {
-        console.warn("Fetch failed:", error.message);
+        return [];
     }
-    return null;
-};
+}
 
 app.get("/numbers/:numberid", async (req, res) => {
     const { numberid } = req.params;
 
     if (!["p", "f", "e", "r"].includes(numberid)) {
-        return res.status(400).json({ error: "Invalid number ID. Use 'p', 'f', 'e', or 'r'." });
+        return res.status(400).json({
+            error: "Invalid number ID. Use 'p', 'f', 'e', or 'r'."
+        });
     }
 
-    const oldNumbers = [...storedNumbers]; 
+    const numbers = await fetchNumbers(numberid);
+    const windowPrevState = [...storedNumbers];
 
-    const newNumber = await fetchNumber(numberid);
-
-    if (newNumber !== null && !storedNumbers.includes(newNumber)) {
-        if (storedNumbers.length >= WINDOW_SIZE) {
-            storedNumbers.shift(); 
+    for (const num of numbers) {
+        if (!storedNumbers.includes(num)) {
+            if (storedNumbers.length >= WINDOW_SIZE) {
+                storedNumbers.shift();
+            }
+            storedNumbers.push(num);
         }
-        storedNumbers.push(newNumber);
     }
 
-    const average = storedNumbers.length > 0
-        ? parseFloat((storedNumbers.reduce((a, b) => a + b, 0) / storedNumbers.length).toFixed(2))
-        : null;
+    const avg =
+        storedNumbers.length > 0
+            ? parseFloat(
+                  (
+                      storedNumbers.reduce((sum, val) => sum + val, 0) /
+                      storedNumbers.length
+                  ).toFixed(2)
+              )
+            : 0;
 
     return res.json({
-        storedBefore: oldNumbers,
-        storedAfter: storedNumbers,
-        average,
+        windowPrevState,
+        windowCurrState: [...storedNumbers],
+        numbers,
+        avg
     });
 });
 
-
 app.listen(PORT, () => {
-    console.log(`✅ Server running on http://localhost:${PORT}`);
+    console.log(`Server running at http://localhost:${PORT}`);
 });
