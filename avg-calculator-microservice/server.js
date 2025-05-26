@@ -7,9 +7,9 @@ const WINDOW_SIZE = 10;
 const TIMEOUT_MS = 500;
 const storedNumbers = [];
 
-const NUMBER_API_URL = "https://test-server.com/numbers"; // Replace this with the ACTUAL API URL
+const NUMBER_API_URL = "https://test-server.com/numbers"; 
 
-// Helper function to fetch number from third-party API
+
 const fetchNumber = async (type) => {
     try {
         const source = axios.CancelToken.source();
@@ -19,7 +19,7 @@ const fetchNumber = async (type) => {
             cancelToken: source.token,
         });
 
-        clearTimeout(timeout); // Clear timeout on success
+        clearTimeout(timeout); 
 
         if (response.data && typeof response.data.number === "number") {
             return response.data.number;
@@ -30,7 +30,6 @@ const fetchNumber = async (type) => {
     return null;
 };
 
-// API Endpoint
 app.get("/numbers/:numberid", async (req, res) => {
     const { numberid } = req.params;
 
@@ -38,13 +37,13 @@ app.get("/numbers/:numberid", async (req, res) => {
         return res.status(400).json({ error: "Invalid number ID. Use 'p', 'f', 'e', or 'r'." });
     }
 
-    const oldNumbers = [...storedNumbers]; // Copy of the current window
+    const oldNumbers = [...storedNumbers]; 
 
     const newNumber = await fetchNumber(numberid);
 
     if (newNumber !== null && !storedNumbers.includes(newNumber)) {
         if (storedNumbers.length >= WINDOW_SIZE) {
-            storedNumbers.shift(); // Remove oldest number
+            storedNumbers.shift(); 
         }
         storedNumbers.push(newNumber);
     }
@@ -60,7 +59,7 @@ app.get("/numbers/:numberid", async (req, res) => {
     });
 });
 
-// Start the server
+
 app.listen(PORT, () => {
     console.log(`✅ Server running on http://localhost:${PORT}`);
 });
