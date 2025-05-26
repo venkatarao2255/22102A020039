@@ -15,18 +15,11 @@ This microservice provides an HTTP API to calculate the average of a list of num
 
 ### Features  
 - Accepts numbers via HTTP POST request  
-- Calculates the average of the input numbers  
-- Returns the average in JSON response  
+- Calculates the average of the input numbers from API that was given 
+- Returns the average in JSON format 
 
-### API Endpoints  
+ 
 
-- `POST /average`  
-  - **Description:** Calculates the average of numbers sent in the request body  
-  - **Request Body:** JSON array of numbers  
-  - **Response:** JSON object with the average value  
-  - **Example:**
-  - 
-  
 
 
 ![Stock Service Architecture](https://res.cloudinary.com/domfamgtf/image/upload/v1748243334/Screenshot_2025-05-26_123628_u1ymok.png)
@@ -49,20 +42,7 @@ This microservice provides an HTTP API to calculate the average of a list of num
 
 # Stock Price Aggregation Microservice
 
-## Overview  
-This microservice aggregates stock price data from multiple sources and serves consolidated stock information via an HTTP API.
 
-## Features  
-- Fetches and aggregates stock price data for requested stock symbols  
-- Provides a simple REST API to retrieve aggregated stock data  
-
-## API Endpoint  
-
-- `GET /stocks/:symbol`  
-  - **Description:** Retrieves aggregated stock price data for the given stock symbol  
-  - **Response:** JSON object containing aggregated stock prices and related metadata  
-  - **Example Response:**  
-    ```json
 ![Stock Service Architecture](https://res.cloudinary.com/domfamgtf/image/upload/v1748241032/stock_service_architecture_ag84br.png)
 
 
