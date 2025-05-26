@@ -31,6 +31,8 @@ This microservice provides an HTTP API to calculate the average of a list of num
 
 ![Stock Service Architecture](https://res.cloudinary.com/domfamgtf/image/upload/v1748243334/Screenshot_2025-05-26_123628_u1ymok.png)
 
+![Stock Service Architecture](https://res.cloudinary.com/domfamgtf/image/upload/v1748243334/Screenshot_2025-05-26_123628_u1ymok.png)
+
 
 ### Technologies and Tools Used  
 - Node.js  
